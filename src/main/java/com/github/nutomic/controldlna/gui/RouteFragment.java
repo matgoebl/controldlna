@@ -37,6 +37,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.v7.app.MediaRouteDiscoveryFragment;
 import android.support.v7.media.MediaControlIntent;
 import android.support.v7.media.MediaItemStatus;
@@ -67,6 +68,7 @@ import android.widget.Toast;
 
 import com.github.nutomic.controldlna.R;
 import com.github.nutomic.controldlna.gui.MainActivity.OnBackPressedListener;
+import com.github.nutomic.controldlna.gui.PreferencesActivity;
 import com.github.nutomic.controldlna.mediarouter.MediaRouterPlayService;
 import com.github.nutomic.controldlna.mediarouter.MediaRouterPlayServiceBinder;
 import com.github.nutomic.controldlna.utility.FileArrayAdapter;
@@ -260,6 +262,11 @@ public class RouteFragment extends MediaRouteDiscoveryFragment implements
 				RouteInfo current = mMediaRouterPlayService.getCurrentRoute();
 				if (current != null && route.getId().equals(current.getId())) {
 					playlistMode(current);
+				} else if ( route.getName().startsWith(getResources().getString(R.string.local_device)) ) {
+					if (PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
+						.getBoolean(PreferencesActivity.KEY_PLAYBACK_LOCAL_DEVICE, false)) {
+							playlistMode(route);
+					}
 				}
 			}
 
