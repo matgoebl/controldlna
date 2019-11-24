@@ -13,6 +13,11 @@
 			android:title="@string/incoming_phone_call_pause"
 			android:defaultValue="true" />
 
+	<CheckBoxPreference
+			android:key="playback_local_device"
+			android:title="@string/playback_local_device"
+			android:defaultValue="false" />
+
 	<Preference
 			android:key="contact_dev"
 			android:title="@string/contact_dev_title" />

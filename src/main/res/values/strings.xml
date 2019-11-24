@@ -79,6 +79,9 @@
 	<!-- Title for the pause playback on call preference -->
 	<string name="incoming_phone_call_pause">Pause playback on incoming phone call</string>
 	
+	<!-- Title for the playback local device preference -->
+	<string name="playback_local_device">Play directly on local device</string>
+	
 	<!-- Title for the contact developer preference -->
 	<string name="contact_dev_title">Contact Developer</string>
 
