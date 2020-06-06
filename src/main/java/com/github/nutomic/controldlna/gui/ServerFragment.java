@@ -40,6 +40,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Parcelable;
 import android.support.v4.app.ListFragment;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -67,8 +68,10 @@ import org.fourthline.cling.model.types.UDN;
 import org.fourthline.cling.support.contentdirectory.callback.Browse;
 import org.fourthline.cling.support.model.BrowseFlag;
 import org.fourthline.cling.support.model.DIDLContent;
+import org.fourthline.cling.support.model.DIDLObject;
 import org.fourthline.cling.support.model.container.Container;
 import org.fourthline.cling.support.model.item.Item;
+import org.fourthline.cling.support.model.item.MusicTrack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -223,7 +226,30 @@ public class ServerFragment extends ListFragment implements OnBackPressedListene
 		else if (getListAdapter() == mFileAdapter) {
 			if (mFileAdapter.getItem(position) instanceof Container)
 				getFiles(((Container) mFileAdapter.getItem(position)).getId());
-			else {
+			else if (PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
+						  .getBoolean(PreferencesActivity.KEY_INTELLIGENT_TRACK_SELECTION, false)) {
+
+				MainActivity activity = (MainActivity) getActivity();
+				List<Item> playlist = new ArrayList<Item>();
+				String title = mFileAdapter.getItem(position).getTitle();
+				DIDLObject item = mFileAdapter.getItem(position);
+
+				// add all files from the current folder only if the choosen track has a number (as in an album),
+				// otherwise select only the single track for playback.
+				// TODO: make the decision more intelligent (e.g. based on album matching)
+				if (item instanceof MusicTrack && ((MusicTrack) item).getOriginalTrackNumber() != null) {
+					for (int i = 0; i < mFileAdapter.getCount(); i++) {
+						if (mFileAdapter.getItem(i) instanceof Item) {
+							playlist.add((Item) mFileAdapter.getItem(i));
+						}
+					}
+					activity.play(playlist, position);
+				} else {
+					playlist.add((Item) mFileAdapter.getItem(position));
+					activity.play(playlist, 0);
+				}
+
+			} else {
 				List<Item> playlist = new ArrayList<Item>();
 				for (int i = 0; i < mFileAdapter.getCount(); i++) {
 					if (mFileAdapter.getItem(i) instanceof Item) {

@@ -88,6 +88,9 @@
 	<string name="servername_filter_message">Only servers whose names match the following regular expression will be listed (the default \".*\" includes all available servers)</string>
 	<string name="servername_filter_default">.*</string>
 	
+	<!-- Title for the intelligent track selection preference -->
+	<string name="intelligent_track_selection">Intelligent track selection</string>
+
 	<!-- Title for the contact developer preference -->
 	<string name="contact_dev_title">Contact Developer</string>
 
