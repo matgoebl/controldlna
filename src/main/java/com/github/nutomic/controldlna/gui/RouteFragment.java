@@ -399,6 +399,12 @@ public class RouteFragment extends MediaRouteDiscoveryFragment implements
 	 * Displays UPNP devices in the ListView.
 	 */
 	private void deviceListMode() {
+		if (PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
+				     .getBoolean(PreferencesActivity.KEY_PLAYBACK_LOCAL_DEVICE, false)) {
+			MainActivity activity = (MainActivity) getActivity();
+			activity.mViewPager.setCurrentItem(0);
+			return;
+		}
 		mControls.setVisibility(View.GONE);
 		mListView.setAdapter(mRouteAdapter);
 		disableTrackHighlight();
