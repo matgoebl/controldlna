@@ -85,7 +85,7 @@ public class DeviceArrayAdapter extends ArrayAdapter<Device<?, ?, ?>>
 		TextView title = (TextView) convertView.findViewById(R.id.title);
 		TextView subtitle = (TextView) convertView.findViewById(R.id.subtitle);
 		title.setText(getItem(position).getDetails().getFriendlyName());
-		subtitle.setText(getItem(position).getDisplayString());
+//		subtitle.setText(getItem(position).getDisplayString());
 
 		if (getItem(position).hasIcons()) {
 			URI uri = getItem(position).getIcons()[0].getUri();
@@ -119,7 +119,7 @@ public class DeviceArrayAdapter extends ArrayAdapter<Device<?, ?, ?>>
 
 			@Override
 			public void run() {
-				if (device.getType().getType().equals(mDeviceType)) {
+				if (device.getType().getType().equals(mDeviceType) && device.getDetails().getFriendlyName().contains("Kids")) {
 					add(device);
 					sort(new Comparator<Device<?, ?, ?>>() {
 
@@ -130,6 +130,7 @@ public class DeviceArrayAdapter extends ArrayAdapter<Device<?, ?, ?>>
 									.compareTo(rhs.getDetails().getFriendlyName());
 						}
 					});
+//					browsingMode(device);
 				}
 			}
 		});

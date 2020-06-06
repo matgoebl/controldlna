@@ -31,6 +31,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.BroadcastReceiver;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -46,12 +48,15 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.github.nutomic.controldlna.R;
 
 import org.fourthline.cling.support.model.item.Item;
+import org.fourthline.cling.model.meta.Device;
 
 import java.util.List;
+import android.util.Log;
 
 /**
  * Main activity, with tabs for media servers and media routes.
@@ -61,6 +66,7 @@ import java.util.List;
  */
 public class MainActivity extends ActionBarActivity {
 
+	private final static String TAG = "MainActivity";
 	/**
 	 * Interface which allows listening to "back" button presses.
 	 */
@@ -170,11 +176,46 @@ public class MainActivity extends ActionBarActivity {
 			mRouteFragment = new RouteFragment();
 		}
 		onNewIntent(getIntent());
+
+		IntentFilter intentFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+		intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
+		registerReceiver(new BroadcastReceiver() {
+		    @Override
+		    public void onReceive(Context context, Intent intent) {
+			if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+			    Log.d(TAG, Intent.ACTION_SCREEN_OFF);
+			    mServerFragment.pauseSearch();
+			} else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+			    Log.d(TAG, Intent.ACTION_SCREEN_ON);
+			    mServerFragment.resumeSearch();
+			}
+		    }
+		}, intentFilter);
+
 	}
 
 	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
+		if (hasFocus) {
+			setFullScreen();
+		}
+    	}
+
+	private void setFullScreen() {
+		getWindow().getDecorView().setSystemUiVisibility(
+				View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+					| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+					| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+					| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+					| View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+					| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+					| View.SYSTEM_UI_FLAG_LAYOUT_STABLE );
+    	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu, menu);
+//		getMenuInflater().inflate(R.menu.menu, menu);
 		return true;
 	}
 
@@ -235,7 +276,7 @@ public class MainActivity extends ActionBarActivity {
 		OnBackPressedListener currentFragment = (OnBackPressedListener)
 				mSectionsPagerAdapter.getItem(mViewPager.getCurrentItem());
 		if (!currentFragment.onBackPressed()) {
-			super.onBackPressed();
+//			super.onBackPressed();
 		}
 	}
 
@@ -266,6 +307,15 @@ public class MainActivity extends ActionBarActivity {
 	public void play(List<Item> playlist, int start) {
 		mViewPager.setCurrentItem(1);
 		mRouteFragment.play(playlist, start);
+	}
+
+	public void stop() {
+		mViewPager.setCurrentItem(0);
+		mRouteFragment.stop();
+	}
+
+        public void browsingMode(Device<?, ?, ?> server) {
+		mServerFragment.browsingMode(server);
 	}
 
 	/**

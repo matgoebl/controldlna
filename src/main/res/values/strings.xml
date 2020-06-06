@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<string name="app_name">ControlDLNA</string>
+	<string name="app_name">Kinder Radio</string>
 
 	<!-- Server Fragment -->
 	<string name="title_server">Server</string>
@@ -58,6 +58,9 @@
 		\nCopyright (c) 2013, Felix Ableitner, All rights reserved.
 		\nModifications:
 		\nCopyright (c) 2016 Adam Baker, All rights reserved.
+		\n
+		\nCopyright (c) 2019 Matthias Goebl
+		\nBuild: 2020-04-20_22-48-32
 		\n
 		\nBSD 3-Clause License
 		\n

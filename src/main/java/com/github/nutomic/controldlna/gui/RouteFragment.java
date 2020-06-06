@@ -65,6 +65,7 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.util.Log;
 
 import com.github.nutomic.controldlna.R;
 import com.github.nutomic.controldlna.gui.MainActivity.OnBackPressedListener;
@@ -90,6 +91,8 @@ import java.util.List;
 public class RouteFragment extends MediaRouteDiscoveryFragment implements
 		OnBackPressedListener, OnItemClickListener, OnClickListener,
 		OnSeekBarChangeListener, OnScrollListener {
+
+	private final static String TAG = "RouteFragment";
 
 	private ListView mListView;
 
@@ -250,23 +253,29 @@ public class RouteFragment extends MediaRouteDiscoveryFragment implements
 		return new MediaRouter.Callback() {
 			@Override
 			public void onRouteAdded(MediaRouter router, RouteInfo route) {
+Log.w(TAG,"XXX Route: +" +route.getName()+".");
 				for (int i = 0; i < mRouteAdapter.getCount(); i++) {
 					if (mRouteAdapter.getItem(i).getId().equals(route.getId())) {
 						mRouteAdapter.remove(mRouteAdapter.getItem(i));
 						break;
 					}
 				}
+
+				if (PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
+					.getBoolean(PreferencesActivity.KEY_PLAYBACK_LOCAL_DEVICE, false)) {
+					if ( route.getName().startsWith(getResources().getString(R.string.local_device)) ) {
+						mRouteAdapter.add(route);
+						playlistMode(route);
+					}
+					return;
+				}
+
 				mRouteAdapter.add(route);
 				mRouteAdapter.sort(RouteAdapter.COMPARATOR);
 
 				RouteInfo current = mMediaRouterPlayService.getCurrentRoute();
 				if (current != null && route.getId().equals(current.getId())) {
 					playlistMode(current);
-				} else if ( route.getName().startsWith(getResources().getString(R.string.local_device)) ) {
-					if (PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
-						.getBoolean(PreferencesActivity.KEY_PLAYBACK_LOCAL_DEVICE, false)) {
-							playlistMode(route);
-					}
 				}
 			}
 
@@ -456,24 +465,25 @@ public class RouteFragment extends MediaRouteDiscoveryFragment implements
 	public boolean onBackPressed() {
 		if (mListView.getAdapter() == mPlaylistAdapter) {
 			if (mPlaying) {
-				new AlertDialog.Builder(getActivity())
-						.setMessage(R.string.exit_renderer)
-						.setPositiveButton(android.R.string.yes,
-								new DialogInterface.OnClickListener() {
-							@Override
-									public void onClick(DialogInterface dialog,
-														int which) {
+//				new AlertDialog.Builder(getActivity())
+//						.setMessage(R.string.exit_renderer)
+//						.setPositiveButton(android.R.string.yes,
+//								new DialogInterface.OnClickListener() {
+//							@Override
+//									public void onClick(DialogInterface dialog,
+//														int which) {
 										mMediaRouterPlayService.stop();
 										changePlayPauseState(false);
-										deviceListMode();
-									}
-								})
-						.setNegativeButton(android.R.string.no, null)
-						.show();
+//										deviceListMode();
+//									}
+//								})
+//						.setNegativeButton(android.R.string.no, null)
+//						.show();
 			}
 			else {
-				deviceListMode();
+//				deviceListMode();
 			}
+			((MainActivity) getActivity()).stop();
 			return true;
 		}
 		return false;
@@ -621,6 +631,11 @@ public class RouteFragment extends MediaRouteDiscoveryFragment implements
 					.show();
 			mStartPlayingOnSelect = start;
 		}
+	}
+
+	public void stop() {
+		mMediaRouterPlayService.stop();
+		changePlayPauseState(false);
 	}
 
 	/**

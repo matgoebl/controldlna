@@ -48,6 +48,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -69,6 +71,9 @@ import org.fourthline.cling.support.model.BrowseFlag;
 import org.fourthline.cling.support.model.DIDLContent;
 import org.fourthline.cling.support.model.container.Container;
 import org.fourthline.cling.support.model.item.Item;
+import org.fourthline.cling.support.model.item.MusicTrack;
+import org.fourthline.cling.support.model.DIDLObject;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +86,7 @@ import java.util.Stack;
  * @author Felix Ableitner
  *
  */
-public class ServerFragment extends ListFragment implements OnBackPressedListener {
+public class ServerFragment extends ListFragment implements OnBackPressedListener,OnItemLongClickListener {
 
 	private final static String TAG = "ServerFragment";
 
@@ -98,7 +103,7 @@ public class ServerFragment extends ListFragment implements OnBackPressedListene
 	 */
 	private Device<?, ?, ?> mCurrentServer;
 
-	private String mRestoreServer;
+	private String mRestoreServer = "9ae5c416-500f-11e9-b4fe-ff2fb906ca4a";
 
 	/**
 	 * ListView adapter for showing a list of files/folders.
@@ -126,6 +131,7 @@ public class ServerFragment extends ListFragment implements OnBackPressedListene
 		 * Registers DeviceListener, adds known devices and starts search if requested.
 		 */
 		public void onServiceConnected(ComponentName className, IBinder service) {
+				Log.w(TAG,"XXXCURR-REST0 CONN ");
 			mUpnpService = (AndroidUpnpService) service;
 			mUpnpService.getRegistry().addListener(mServerAdapter);
 			for (Device<?, ?, ?> d : mUpnpService.getControlPoint().getRegistry().getDevices())
@@ -133,9 +139,11 @@ public class ServerFragment extends ListFragment implements OnBackPressedListene
 			mUpnpService.getControlPoint().search();
 
 			if (mRestoreServer != null) {
+				Log.w(TAG,"XXXCURR-REST: " + mRestoreServer);
 				mCurrentServer = mUpnpService.getControlPoint().getRegistry()
 						.getDevice(new UDN(mRestoreServer.replace("uuid:", "")), false);
 				if (mCurrentServer != null) {
+				Log.w(TAG,"XXX2CURR-REST: " + mRestoreServer);
 					setListAdapter(mFileAdapter);
 					// Duplicate the top element because getFiles will remove it.
 					mListState.add(mListState.peek());
@@ -180,6 +188,14 @@ public class ServerFragment extends ListFragment implements OnBackPressedListene
 
 		mEmptyView = (TextView) getListView().getEmptyView();
 
+//getListView().setLongClickable(true);
+//		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
+//    public boolean onItemLongClick(AdapterView<?> l, View v, int position, long id) {
+//        return onItemLongClickx(ListView l, View v, final int position, long id);
+//    }
+//});
+//onItemLongClick);
+
 		if (savedInstanceState != null) {
 			mRestoreServer = savedInstanceState.getString("current_server");
 			mCurrentPath.addAll(savedInstanceState.getStringArrayList("path"));
@@ -212,6 +228,12 @@ public class ServerFragment extends ListFragment implements OnBackPressedListene
 		getActivity().unregisterReceiver(mWifiReceiver);
 	}
 
+//	@Override
+//	public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom){
+//		Log.w(TAG,"XXX-CHANGED");
+//	}
+
+
 	/**
 	 * Enters directory browsing mode or enters a deeper level directory.
 	 */
@@ -221,10 +243,42 @@ public class ServerFragment extends ListFragment implements OnBackPressedListene
 			browsingMode(mServerAdapter.getItem(position));
 		}
 		else if (getListAdapter() == mFileAdapter) {
+				Log.w(TAG,"XXX2CURR: " + mCurrentServer.getIdentity().getUdn().toString());
 			if (mFileAdapter.getItem(position) instanceof Container)
 				getFiles(((Container) mFileAdapter.getItem(position)).getId());
 			else {
+				MainActivity activity = (MainActivity) getActivity();
 				List<Item> playlist = new ArrayList<Item>();
+				String title = mFileAdapter.getItem(position).getTitle();
+				DIDLObject item = mFileAdapter.getItem(position);
+Log.w(TAG,"XXXMATCH: "+title+".");
+				//if (title.matches("[0-9].*")) {
+				if (item instanceof MusicTrack && ((MusicTrack) item).getOriginalTrackNumber() != null) {
+				for (int i = 0; i < mFileAdapter.getCount(); i++) {
+					if (mFileAdapter.getItem(i) instanceof Item) {
+						playlist.add((Item) mFileAdapter.getItem(i));
+					}
+				}
+				activity.play(playlist, position);
+				} else {
+				playlist.add((Item) mFileAdapter.getItem(position));
+				activity.play(playlist, 0);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Enters directory browsing mode or enters a deeper level directory.
+	 */
+	@Override
+	public boolean onItemLongClick(AdapterView l, View v, final int position, long id) {
+		if (getListAdapter() == mFileAdapter) {
+				Log.w(TAG,"XXX2CURR: " + mCurrentServer.getIdentity().getUdn().toString());
+			if (mFileAdapter.getItem(position) instanceof Container) {
+			} else {
+				List<Item> playlist = new ArrayList<Item>();
+				playlist.add((Item) mFileAdapter.getItem((position)));
 				for (int i = 0; i < mFileAdapter.getCount(); i++) {
 					if (mFileAdapter.getItem(i) instanceof Item) {
 						playlist.add((Item) mFileAdapter.getItem(i));
@@ -234,12 +288,13 @@ public class ServerFragment extends ListFragment implements OnBackPressedListene
 				activity.play(playlist, position);
 			}
 		}
+		return true;
 	}
 
 	/**
 	 * Create a suitable context menu for the currently selected item.
 	 */
-	@Override
+//	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo info)
 	{
 		super.onCreateContextMenu(menu, v, info);
@@ -297,7 +352,7 @@ public class ServerFragment extends ListFragment implements OnBackPressedListene
 	/**
 	 * Displays files for server (starting from root).
 	 */
-	private void browsingMode(Device<?, ?, ?> server) {
+	public void browsingMode(Device<?, ?, ?> server) {
 		setListAdapter(mFileAdapter);
 		mCurrentServer = server;
 		getFiles(ROOT_DIRECTORY);
@@ -433,6 +488,22 @@ public class ServerFragment extends ListFragment implements OnBackPressedListene
 	{
 		if (mUpnpService != null)
 			mUpnpService.getControlPoint().search();
+	}
+
+	public void pauseSearch()
+	{
+		if (mUpnpService != null) {
+			Log.w(TAG,"XXX pauseSearch");
+			mUpnpService.getRegistry().pause();
+		}
+	}
+
+	public void resumeSearch()
+	{
+		if (mUpnpService != null) {
+			Log.w(TAG,"XXX resumeSearch");
+			mUpnpService.getRegistry().resume();
+		}
 	}
 
 }

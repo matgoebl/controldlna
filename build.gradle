@@ -57,14 +57,10 @@ android {
 
     signingConfigs {
         release {
-            // Android Studio does not pass environment variables.
-            // This means you have to use the command line for release builds.
-            def ks = System.getenv("KEYSTORE")
-            def ka = System.getenv("KEY_ALIAS")
-            if (ks != null && ka != null) {
-                storeFile file(ks)
-                keyAlias ka
-            }
+                storeFile file(System.getenv("KEYSTORE_RELEASE"))
+                storePassword System.getenv("KEYSTORE_PASSWORD")
+                keyAlias System.getenv("KEY_ALIAS")
+                keyPassword System.getenv("KEY_PASSWORD")
         }
     }
 
