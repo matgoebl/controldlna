@@ -51,6 +51,7 @@ public class PreferencesActivity extends PreferenceActivity
 	public static final String KEY_INCOMING_PHONE_CALL_PAUSE = "incoming_phone_call_pause";
 	public static final String KEY_PLAYBACK_LOCAL_DEVICE = "playback_local_device";
 	public static final String KEY_SERVERNAME_FILTER = "servername_filter";
+	public static final String KEY_INTELLIGENT_TRACK_SELECTION = "intelligent_track_selection";
 	private static final String KEY_CONTACT_DEV = "contact_dev";
 
 	private ListPreference mEnableWifiOnStart;

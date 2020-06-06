@@ -24,6 +24,11 @@
 			android:dialogMessage="@string/servername_filter_message"
 			android:defaultValue="@string/servername_filter_default" />
 
+	<CheckBoxPreference
+			android:key="intelligent_track_selection"
+			android:title="@string/intelligent_track_selection"
+			android:defaultValue="false" />
+
 	<Preference
 			android:key="contact_dev"
 			android:title="@string/contact_dev_title" />
