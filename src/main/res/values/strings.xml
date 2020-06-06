@@ -79,6 +79,9 @@
 	<!-- Title for the pause playback on call preference -->
 	<string name="incoming_phone_call_pause">Pause playback on incoming phone call</string>
 	
+	<!-- Title for the intelligent track selection preference -->
+	<string name="intelligent_track_selection">Intelligent track selection</string>
+
 	<!-- Title for the contact developer preference -->
 	<string name="contact_dev_title">Contact Developer</string>
 

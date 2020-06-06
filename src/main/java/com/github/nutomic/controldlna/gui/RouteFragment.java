@@ -448,6 +448,13 @@ public class RouteFragment extends MediaRouteDiscoveryFragment implements
 	@Override
 	public boolean onBackPressed() {
 		if (mListView.getAdapter() == mPlaylistAdapter) {
+			if (PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
+					     .getBoolean(PreferencesActivity.KEY_INTELLIGENT_TRACK_SELECTION, false)) {
+				// if not always adding the whole folder (as in intelligent track selection mode)
+				// using the back button for stopping and choosing another title comes handy
+				mMediaRouterPlayService.stop();
+				changePlayPauseState(false);
+			}
 			if (mPlaying) {
 				new AlertDialog.Builder(getActivity())
 						.setMessage(R.string.exit_renderer)
