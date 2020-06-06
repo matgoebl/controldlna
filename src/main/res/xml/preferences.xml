@@ -18,6 +18,12 @@
 			android:title="@string/playback_local_device"
 			android:defaultValue="false" />
 
+	<EditTextPreference android:key="servername_filter"
+			android:title="@string/servername_filter"
+			android:dialogTitle="@string/servername_filter_title"
+			android:dialogMessage="@string/servername_filter_message"
+			android:defaultValue="@string/servername_filter_default" />
+
 	<Preference
 			android:key="contact_dev"
 			android:title="@string/contact_dev_title" />

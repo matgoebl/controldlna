@@ -82,6 +82,12 @@
 	<!-- Title for the playback local device preference -->
 	<string name="playback_local_device">Play directly on local device</string>
 	
+	<!-- Title and messages for the servername filter preference -->
+	<string name="servername_filter">Filter server list</string>
+	<string name="servername_filter_title">Set filter for server list</string>
+	<string name="servername_filter_message">Only servers whose names match the following regular expression will be listed (the default \".*\" includes all available servers)</string>
+	<string name="servername_filter_default">.*</string>
+	
 	<!-- Title for the contact developer preference -->
 	<string name="contact_dev_title">Contact Developer</string>
 

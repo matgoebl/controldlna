@@ -29,6 +29,7 @@ package com.github.nutomic.controldlna.utility;
 
 import android.app.Activity;
 import android.content.Context;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.github.nutomic.controldlna.R;
+import com.github.nutomic.controldlna.gui.PreferencesActivity;
 
 import org.fourthline.cling.model.meta.Device;
 import org.fourthline.cling.model.meta.LocalDevice;
@@ -119,7 +121,9 @@ public class DeviceArrayAdapter extends ArrayAdapter<Device<?, ?, ?>>
 
 			@Override
 			public void run() {
-				if (device.getType().getType().equals(mDeviceType)) {
+				String filter = PreferenceManager.getDefaultSharedPreferences(getContext())
+					.getString(PreferencesActivity.KEY_SERVERNAME_FILTER, ".*");
+				if (device.getType().getType().equals(mDeviceType) && device.getDetails().getFriendlyName().matches(filter)) {
 					add(device);
 					sort(new Comparator<Device<?, ?, ?>>() {
 
