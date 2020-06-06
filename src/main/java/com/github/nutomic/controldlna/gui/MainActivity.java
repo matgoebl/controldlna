@@ -235,7 +235,11 @@ public class MainActivity extends ActionBarActivity {
 		OnBackPressedListener currentFragment = (OnBackPressedListener)
 				mSectionsPagerAdapter.getItem(mViewPager.getCurrentItem());
 		if (!currentFragment.onBackPressed()) {
-			super.onBackPressed();
+			if (mViewPager.getCurrentItem() == 1 ) {
+				mViewPager.setCurrentItem(0);
+			} else {
+				super.onBackPressed();
+			}
 		}
 	}
 
