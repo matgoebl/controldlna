@@ -256,17 +256,22 @@ public class RouteFragment extends MediaRouteDiscoveryFragment implements
 						break;
 					}
 				}
+
+				if (PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
+					.getBoolean(PreferencesActivity.KEY_PLAYBACK_LOCAL_DEVICE, false)) {
+					if ( route.getName().startsWith(getResources().getString(R.string.local_device)) ) {
+						mRouteAdapter.add(route);
+						playlistMode(route);
+					}
+					return;
+				}
+
 				mRouteAdapter.add(route);
 				mRouteAdapter.sort(RouteAdapter.COMPARATOR);
 
 				RouteInfo current = mMediaRouterPlayService.getCurrentRoute();
 				if (current != null && route.getId().equals(current.getId())) {
 					playlistMode(current);
-				} else if ( route.getName().startsWith(getResources().getString(R.string.local_device)) ) {
-					if (PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
-						.getBoolean(PreferencesActivity.KEY_PLAYBACK_LOCAL_DEVICE, false)) {
-							playlistMode(route);
-					}
 				}
 			}
 
