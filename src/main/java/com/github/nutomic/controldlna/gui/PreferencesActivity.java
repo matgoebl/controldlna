@@ -34,6 +34,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
@@ -49,9 +50,11 @@ public class PreferencesActivity extends PreferenceActivity
 	public static final String KEY_ENABLE_WIFI_ON_START = "enable_wifi_on_start";
 	public static final String KEY_INCOMING_PHONE_CALL_PAUSE = "incoming_phone_call_pause";
 	public static final String KEY_PLAYBACK_LOCAL_DEVICE = "playback_local_device";
+	public static final String KEY_SERVERNAME_FILTER = "servername_filter";
 	private static final String KEY_CONTACT_DEV = "contact_dev";
 
 	private ListPreference mEnableWifiOnStart;
+	private EditTextPreference mServernameFilter;
 	private Preference mContactDev;
 
 	/**
@@ -74,6 +77,8 @@ public class PreferencesActivity extends PreferenceActivity
 		final PreferenceScreen screen = getPreferenceScreen();
 		mEnableWifiOnStart = (ListPreference) screen.findPreference(KEY_ENABLE_WIFI_ON_START);
 		mEnableWifiOnStart.setSummary(mEnableWifiOnStart.getEntry());
+		mServernameFilter = (EditTextPreference) screen.findPreference(KEY_SERVERNAME_FILTER);
+		mServernameFilter.setSummary(mServernameFilter.getText());
 		mContactDev = screen.findPreference(KEY_CONTACT_DEV);
 	}
 
@@ -111,6 +116,9 @@ public class PreferencesActivity extends PreferenceActivity
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (key.equals(KEY_ENABLE_WIFI_ON_START) && mEnableWifiOnStart != null) {
 			mEnableWifiOnStart.setSummary(mEnableWifiOnStart.getEntry());
+		}
+		if (key.equals(KEY_SERVERNAME_FILTER) && mServernameFilter != null) {
+			mServernameFilter.setSummary(mServernameFilter.getText());
 		}
 	}
 
