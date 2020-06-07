@@ -174,7 +174,7 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu, menu);
+//		getMenuInflater().inflate(R.menu.menu, menu);
 		return true;
 	}
 
@@ -226,6 +226,13 @@ public class MainActivity extends ActionBarActivity {
 		}
 	}
 
+	@Override
+	public void onPause() {
+		super.onPause();
+		mRouteFragment.clearPlaylist();
+		finish();
+	}
+
 	/**
 	 * Forwards back press to active Fragment (unless the fragment is
 	 * showing its root view).
@@ -238,7 +245,7 @@ public class MainActivity extends ActionBarActivity {
 			if (mViewPager.getCurrentItem() == 1 ) {
 				mViewPager.setCurrentItem(0);
 			} else {
-				super.onBackPressed();
+//				super.onBackPressed();
 			}
 		}
 	}

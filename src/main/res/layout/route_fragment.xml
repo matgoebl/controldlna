@@ -53,6 +53,7 @@
 
 			<ImageButton
 					android:id="@+id/shuffle"
+					android:visibility="gone"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:contentDescription="@string/shuffle"
@@ -81,6 +82,7 @@
 
 			<ImageButton
 					android:id="@+id/repeat"
+					android:visibility="gone"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:contentDescription="@string/repeat"
