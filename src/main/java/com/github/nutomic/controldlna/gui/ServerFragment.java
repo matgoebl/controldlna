@@ -227,7 +227,7 @@ public class ServerFragment extends ListFragment implements OnBackPressedListene
 			if (mFileAdapter.getItem(position) instanceof Container)
 				getFiles(((Container) mFileAdapter.getItem(position)).getId());
 			else if (PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
-						  .getBoolean(PreferencesActivity.KEY_INTELLIGENT_TRACK_SELECTION, false)) {
+						  .getBoolean(PreferencesActivity.KEY_INTELLIGENT_TRACK_SELECTION, true)) {
 
 				MainActivity activity = (MainActivity) getActivity();
 				List<Item> playlist = new ArrayList<Item>();
@@ -265,7 +265,7 @@ public class ServerFragment extends ListFragment implements OnBackPressedListene
 	/**
 	 * Create a suitable context menu for the currently selected item.
 	 */
-	@Override
+//	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo info)
 	{
 		super.onCreateContextMenu(menu, v, info);

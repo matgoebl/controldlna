@@ -258,7 +258,7 @@ public class RouteFragment extends MediaRouteDiscoveryFragment implements
 				}
 
 				if (PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
-					.getBoolean(PreferencesActivity.KEY_PLAYBACK_LOCAL_DEVICE, false)) {
+					.getBoolean(PreferencesActivity.KEY_PLAYBACK_LOCAL_DEVICE, true)) {
 					if ( route.getName().startsWith(getResources().getString(R.string.local_device)) ) {
 						mRouteAdapter.add(route);
 						playlistMode(route);
@@ -335,7 +335,7 @@ public class RouteFragment extends MediaRouteDiscoveryFragment implements
 		}
 	}
 
-	@Override
+//	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo info)
 	{
 		super.onCreateContextMenu(menu, v, info);
@@ -400,7 +400,7 @@ public class RouteFragment extends MediaRouteDiscoveryFragment implements
 	 */
 	private void deviceListMode() {
 		if (PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
-				     .getBoolean(PreferencesActivity.KEY_PLAYBACK_LOCAL_DEVICE, false)) {
+				     .getBoolean(PreferencesActivity.KEY_PLAYBACK_LOCAL_DEVICE, true)) {
 			MainActivity activity = (MainActivity) getActivity();
 			activity.mViewPager.setCurrentItem(0);
 			return;
@@ -467,7 +467,7 @@ public class RouteFragment extends MediaRouteDiscoveryFragment implements
 	public boolean onBackPressed() {
 		if (mListView.getAdapter() == mPlaylistAdapter) {
 			if (PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
-					     .getBoolean(PreferencesActivity.KEY_INTELLIGENT_TRACK_SELECTION, false)) {
+					     .getBoolean(PreferencesActivity.KEY_INTELLIGENT_TRACK_SELECTION, true)) {
 				// if not always adding the whole folder (as in intelligent track selection mode)
 				// using the back button for stopping and choosing another title comes handy
 				mMediaRouterPlayService.stop();
