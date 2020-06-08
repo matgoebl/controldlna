@@ -245,6 +245,7 @@ public class MainActivity extends ActionBarActivity {
 			if (mViewPager.getCurrentItem() == 1 ) {
 				mViewPager.setCurrentItem(0);
 			} else {
+				finish();
 //				super.onBackPressed();
 			}
 		}

@@ -37,6 +37,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.preference.PreferenceManager;
 import android.support.v7.app.MediaRouteDiscoveryFragment;
 import android.support.v7.media.MediaControlIntent;
@@ -105,6 +107,8 @@ public class RouteFragment extends MediaRouteDiscoveryFragment implements
 	private View mCurrentTrackView;
 
 	private boolean mPlaying;
+
+	private WakeLock wakeLock;
 
 	private RouteAdapter mRouteAdapter;
 
@@ -220,6 +224,9 @@ public class RouteFragment extends MediaRouteDiscoveryFragment implements
 		if (savedInstanceState != null) {
 			mListView.onRestoreInstanceState(savedInstanceState.getParcelable("list_state"));
 		}
+
+		wakeLock = ((PowerManager) getActivity().getApplicationContext().getSystemService(Context.POWER_SERVICE))
+				.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "ControlDLNAPlaybackWakeLock");
 	}
 
 	@Override
@@ -284,7 +291,8 @@ public class RouteFragment extends MediaRouteDiscoveryFragment implements
 			public void onRouteRemoved(MediaRouter router, RouteInfo route) {
 				mRouteAdapter.remove(route);
 				if (route.equals(mSelectedRoute)) {
-					mPlaying = false;
+					//mPlaying = false;
+					changePlayPauseState(false);
 					onBackPressed();
 				}
 			}
@@ -723,8 +731,15 @@ public class RouteFragment extends MediaRouteDiscoveryFragment implements
 		if (mPlaying) {
 			mPlayPause.setImageResource(R.drawable.ic_action_pause);
 			mPlayPause.setContentDescription(getResources().getString(R.string.pause));
+
+			if (!wakeLock.isHeld()) {
+				wakeLock.acquire();
+			}
 		}
 		else {
+			if (wakeLock.isHeld()) {
+				wakeLock.release();
+			}
 			mPlayPause.setImageResource(R.drawable.ic_action_play);
 			mPlayPause.setContentDescription(getResources().getString(R.string.play));
 		}
