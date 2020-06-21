@@ -22,8 +22,8 @@
 				android:id="@+id/title"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
-				android:textAppearance="?android:attr/textAppearanceMedium"
-				android:lines="1"
+				android:textAppearance="?android:attr/textAppearanceSmall"
+				android:maxLines="2"
 				android:ellipsize="end" />
 		
 		<TextView
