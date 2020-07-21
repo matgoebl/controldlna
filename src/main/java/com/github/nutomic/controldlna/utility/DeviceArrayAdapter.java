@@ -122,7 +122,7 @@ public class DeviceArrayAdapter extends ArrayAdapter<Device<?, ?, ?>>
 			@Override
 			public void run() {
 				String filter = PreferenceManager.getDefaultSharedPreferences(getContext())
-					.getString(PreferencesActivity.KEY_SERVERNAME_FILTER, ".*Kids.*");
+					.getString(PreferencesActivity.KEY_SERVERNAME_FILTER, ".*Kids.Radio.*");
 				if (device.getType().getType().equals(mDeviceType) && device.getDetails().getFriendlyName().matches(filter)) {
 					add(device);
 					sort(new Comparator<Device<?, ?, ?>>() {
