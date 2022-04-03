@@ -48,6 +48,7 @@ import android.support.v7.media.MediaRouter;
 import android.support.v7.media.MediaRouter.Callback;
 import android.support.v7.media.MediaRouter.ProviderInfo;
 import android.support.v7.media.MediaRouter.RouteInfo;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -93,6 +94,7 @@ public class RouteFragment extends MediaRouteDiscoveryFragment implements
 		OnBackPressedListener, OnItemClickListener, OnClickListener,
 		OnSeekBarChangeListener, OnScrollListener {
 
+	private static final String TAG = "RouteFragment";
 	private ListView mListView;
 
 	private View mControls;
@@ -733,12 +735,23 @@ public class RouteFragment extends MediaRouteDiscoveryFragment implements
 			mPlayPause.setContentDescription(getResources().getString(R.string.pause));
 
 			if (!wakeLock.isHeld()) {
+				Log.d(TAG, "acquiring wake lock");
 				wakeLock.acquire();
 			}
 		}
 		else {
 			if (wakeLock.isHeld()) {
-				wakeLock.release();
+				new Handler().postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						if (!mPlaying) {
+							Log.d(TAG, "releasing wake lock");
+							wakeLock.release();
+						} else {
+							Log.d(TAG, "keeping wake lock");
+						}
+					}
+				}, 3000);
 			}
 			mPlayPause.setImageResource(R.drawable.ic_action_play);
 			mPlayPause.setContentDescription(getResources().getString(R.string.play));
