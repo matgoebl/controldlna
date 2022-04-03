@@ -226,12 +226,12 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 
-	@Override
-	public void onPause() {
-		super.onPause();
-		mRouteFragment.clearPlaylist();
-		finish();
-	}
+//	@Override
+//	public void onPause() {
+//		super.onPause();
+//		mRouteFragment.clearPlaylist();
+//		finish();
+//	}
 
 	/**
 	 * Forwards back press to active Fragment (unless the fragment is
@@ -245,8 +245,8 @@ public class MainActivity extends AppCompatActivity {
 			if (mViewPager.getCurrentItem() == 1 ) {
 				mViewPager.setCurrentItem(0);
 			} else {
-				finish();
-//				super.onBackPressed();
+//				finish();
+				super.onBackPressed();
 			}
 		}
 	}
