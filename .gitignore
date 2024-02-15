@@ -37,3 +37,7 @@ proguard/
 build/
 .gradle/
 build.xml
+
+# Project specific files
+.cache
+Makefile.local
