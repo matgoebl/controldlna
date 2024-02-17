@@ -217,6 +217,12 @@ public class RouteFragment extends MediaRouteDiscoveryFragment implements
 		mCurrentTimeView = (TextView) getView().findViewById(R.id.current_time);
 		mTotalTimeView = (TextView) getView().findViewById(R.id.total_time);
 
+		if (PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
+			.getBoolean(PreferencesActivity.KEY_REDUCED_LAYOUT, true)) {
+				mShuffle.setVisibility(View.GONE);
+				mRepeat.setVisibility(View.GONE);
+			}
+
 		getActivity().getApplicationContext().startService(
 				new Intent(getActivity(), MediaRouterPlayService.class));
 		getActivity().getApplicationContext().bindService(
@@ -345,7 +351,7 @@ public class RouteFragment extends MediaRouteDiscoveryFragment implements
 		}
 	}
 
-//	@Override
+	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo info)
 	{
 		super.onCreateContextMenu(menu, v, info);

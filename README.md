@@ -33,10 +33,14 @@ This app variant has a simplified interface and restricted configuration:
 - app name changed to "Kids Radio"
 - stop playback and dnla discovery on app exit
 - back button does not leave app
-- shuffle and repeat buttons removed
-- no subtitles in server list
+- shuffle and repeat buttons removed (when preference "reduced layout" is checked)
+- no subtitles in server list (when preference "reduced layout" is checked)
 - no context menu for adding folders or single files (intelligent track selection as a replacement)
-- no options menu (therefore hardcoded preferences)
+- no options menu (when preference "hide options menu (one-way!)" is checked)
+  - preferences cannot be changed afterwards
+  - delete app data to re-enable options menu
+  - to fully disable options menu, hardcode preferences in the code with
+    [`.getBoolean(PreferencesActivity.KEY_HIDE_OPTIONS, true))`](src/main/java/com/github/nutomic/controldlna/gui/MainActivity.java)
 - keep screen on while playing
 - hardcoded preferences:
   - playback only on local device

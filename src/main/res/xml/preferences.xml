@@ -16,7 +16,7 @@
 	<CheckBoxPreference
 			android:key="playback_local_device"
 			android:title="@string/playback_local_device"
-			android:defaultValue="false" />
+			android:defaultValue="true" />
 
 	<EditTextPreference android:key="servername_filter"
 			android:title="@string/servername_filter"
@@ -27,6 +27,16 @@
 	<CheckBoxPreference
 			android:key="intelligent_track_selection"
 			android:title="@string/intelligent_track_selection"
+			android:defaultValue="true" />
+
+	<CheckBoxPreference
+			android:key="reduced_layout"
+			android:title="@string/reduced_layout"
+			android:defaultValue="true" />
+
+	<CheckBoxPreference
+			android:key="hide_options"
+			android:title="@string/hide_options"
 			android:defaultValue="false" />
 
 	<Preference

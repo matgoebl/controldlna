@@ -174,7 +174,10 @@ public class MainActivity extends AppCompatActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-//		getMenuInflater().inflate(R.menu.menu, menu);
+		if (! PreferenceManager.getDefaultSharedPreferences(this)
+			.getBoolean(PreferencesActivity.KEY_HIDE_OPTIONS, false)) {
+				getMenuInflater().inflate(R.menu.menu, menu);
+			}
 		return true;
 	}
 
