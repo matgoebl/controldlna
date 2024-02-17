@@ -87,7 +87,10 @@ public class DeviceArrayAdapter extends ArrayAdapter<Device<?, ?, ?>>
 		TextView title = (TextView) convertView.findViewById(R.id.title);
 		TextView subtitle = (TextView) convertView.findViewById(R.id.subtitle);
 		title.setText(getItem(position).getDetails().getFriendlyName());
-//		subtitle.setText(getItem(position).getDisplayString());
+		if (! PreferenceManager.getDefaultSharedPreferences(getContext())
+			.getBoolean(PreferencesActivity.KEY_REDUCED_LAYOUT, true)) {
+				subtitle.setText(getItem(position).getDisplayString());
+			}
 
 		if (getItem(position).hasIcons()) {
 			URI uri = getItem(position).getIcons()[0].getUri();
