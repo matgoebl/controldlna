@@ -1,0 +1,30 @@
+name: Build
+
+on:
+  push:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-20.04
+    container: mingc/android-build-box:1.17.0
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: actions/cache@v3
+      with:
+        path: /root/.gradle
+        key: ${{ runner.os }}-gradle-${{ hashFiles('*.gradle') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+
+    - name: Build
+      run: |
+        bash ./gradlew assembleDebug
+
+    - name: Archive APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: controldlna-debug
+        path: build/outputs/apk/debug/controldlna-debug.apk

@@ -44,6 +44,7 @@ android {
 	// Caused by cling, because they apparently include APIs for other platforms.
 	lintOptions {
 		disable 'InvalidPackage'
+		abortOnError false
 	}
 
     packagingOptions {
@@ -57,13 +58,17 @@ android {
 
     signingConfigs {
         release {
-            // Android Studio does not pass environment variables.
-            // This means you have to use the command line for release builds.
-            def ks = System.getenv("KEYSTORE")
-            def ka = System.getenv("KEY_ALIAS")
-            if (ks != null && ka != null) {
-                storeFile file(ks)
-                keyAlias ka
+            def keyStore = System.getenv("ANDROID_KEYSTORE")
+            if (keyStore != null && keyStore != "") {
+                def keyStoreFile = keyStore + "/keystore"
+                def keyPropertiesFile = keyStore + "/keyprops"
+                project.logger.lifecycle("ANDROID KEYSTORE: Using store ${keyStoreFile} with properties ${keyPropertiesFile}")
+                storeFile file(keyStoreFile)
+                def kP = new Properties()
+                kP.load(new FileInputStream(keyPropertiesFile))
+                storePassword kP['storePassword']
+                keyAlias kP['keyAlias']
+                keyPassword kP['keyPassword']
             }
         }
     }
