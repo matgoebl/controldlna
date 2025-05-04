@@ -265,7 +265,7 @@ public class ServerFragment extends ListFragment implements OnBackPressedListene
 	/**
 	 * Create a suitable context menu for the currently selected item.
 	 */
-//	@Override
+	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo info)
 	{
 		super.onCreateContextMenu(menu, v, info);

@@ -41,7 +41,7 @@
 	<string name="upnp_route_provider_service">UPNP Route Provider Service</string>
 	
 	<!-- Developer contact mail with '@', '.' replaced -->
-	<string name="contact_mail" translatable="false">controldlna%1$snutomic%2$scom</string>
+	<string name="contact_mail" translatable="false">matthias.goebl%1$sgoebl%2$snet</string>
 
 	<!-- Title for the Refresh Devices Action-->
 	<string name="refresh_title">Refresh Devices</string>
@@ -86,10 +86,16 @@
 	<string name="servername_filter">Filter server list</string>
 	<string name="servername_filter_title">Set filter for server list</string>
 	<string name="servername_filter_message">Only servers whose names match the following regular expression will be listed (the default \".*\" includes all available servers)</string>
-	<string name="servername_filter_default">.*</string>
+	<string name="servername_filter_default">.*Kids.Radio.*</string>
 	
 	<!-- Title for the intelligent track selection preference -->
 	<string name="intelligent_track_selection">Intelligent track selection</string>
+
+	<!-- Title for the reduced_layout preference -->
+	<string name="reduced_layout">Reduced layout</string>
+
+	<!-- Title for the hide_options preference -->
+	<string name="hide_options">Hide options menu (one-way!)</string>
 
 	<!-- Title for the contact developer preference -->
 	<string name="contact_dev_title">Contact Developer</string>

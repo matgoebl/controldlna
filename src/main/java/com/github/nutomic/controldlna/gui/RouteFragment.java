@@ -217,6 +217,12 @@ public class RouteFragment extends MediaRouteDiscoveryFragment implements
 		mCurrentTimeView = (TextView) getView().findViewById(R.id.current_time);
 		mTotalTimeView = (TextView) getView().findViewById(R.id.total_time);
 
+		if (PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
+			.getBoolean(PreferencesActivity.KEY_REDUCED_LAYOUT, true)) {
+				mShuffle.setVisibility(View.GONE);
+				mRepeat.setVisibility(View.GONE);
+			}
+
 		getActivity().getApplicationContext().startService(
 				new Intent(getActivity(), MediaRouterPlayService.class));
 		getActivity().getApplicationContext().bindService(
@@ -345,7 +351,7 @@ public class RouteFragment extends MediaRouteDiscoveryFragment implements
 		}
 	}
 
-//	@Override
+	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo info)
 	{
 		super.onCreateContextMenu(menu, v, info);
@@ -358,6 +364,7 @@ public class RouteFragment extends MediaRouteDiscoveryFragment implements
 			menu.add(Menu.NONE, 3, Menu.NONE, "Move Up");
 
 		menu.add(Menu.NONE, 4, Menu.NONE, "Remove from playlist");
+		menu.add(Menu.NONE, 6, Menu.NONE, "Repeat 10x");
 
 		if (position != mPlaylistAdapter.getCount()-1)
 			menu.add(Menu.NONE, 5, Menu.NONE, "Move Down");
@@ -399,6 +406,12 @@ public class RouteFragment extends MediaRouteDiscoveryFragment implements
 				if ((mMediaRouterPlayService.getCurrentTrack() == info.position) ||
 						(mMediaRouterPlayService.getCurrentTrack() == info.position + 1))
 					mMediaRouterPlayService.play(mMediaRouterPlayService.getCurrentTrack());
+				return true;
+			case 6:
+				for (int n = 0; n < 10; n++) {
+					mPlaylistAdapter.insert(i, info.position + 1);
+					mMediaRouterPlayService.insert((Item) i, info.position + 1);
+				}
 				return true;
 			default:
 				return super.onContextItemSelected(item);
